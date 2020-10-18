@@ -1,0 +1,159 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "235574e3-0c6b-44b3-91cd-19ab2cd1e916": {
+        "id": "235574e3-0c6b-44b3-91cd-19ab2cd1e916",
+        "parent": null,
+        "name": "TCSBaNCSVoice.py",
+        "type": "PYTHON_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "TCSBaNCSVoice.py",
+        "cursor": {
+          "lineNumber": 25,
+          "column": 1
+        },
+        "config": {
+          "runtime": "python3.8",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": [],
+          "name": "TCSBaNCSVoice"
+        },
+        "triggers": [
+          {
+            "resourceName": "alexaSK4f236fd7e9144c80bac497ed0af99cb8",
+            "config": {}
+          }
+        ],
+        "lastUpdated": 1603025641888
+      }
+    },
+    "openFiles": [
+      "235574e3-0c6b-44b3-91cd-19ab2cd1e916"
+    ],
+    "currentFileId": "235574e3-0c6b-44b3-91cd-19ab2cd1e916",
+    "resources": {
+      "alexaSK4f236fd7e9144c80bac497ed0af99cb8": {
+        "name": "alexaSK4f236fd7e9144c80bac497ed0af99cb8",
+        "type": "ALEXA",
+        "config": {
+          "type": 1,
+          "verifiedID": true,
+          "skillID": "amzn1.ask.skill.4f236fd7-e914-4c80-bac4-97ed0af99cb8",
+          "applicationID": ""
+        }
+      },
+      "ddbBancsLogin": {
+        "name": "ddbBancsLogin",
+        "type": "DynamoDB",
+        "config": {
+          "mode": 1,
+          "table": {
+            "arn": "arn:aws:dynamodb:us-east-1:571286446617:table/BancsLogin",
+            "name": "BancsLogin",
+            "partitionKey": "username",
+            "partitionKeyType": "S",
+            "hasSortKey": false,
+            "sortKey": "",
+            "sortKeyType": "",
+            "payPerRequest": true,
+            "mode": 1,
+            "secondaryIndexes": {}
+          }
+        }
+      },
+      "ddbBancsPolicyDetails": {
+        "name": "ddbBancsPolicyDetails",
+        "type": "DynamoDB",
+        "config": {
+          "mode": 1,
+          "table": {
+            "arn": "arn:aws:dynamodb:us-east-1:571286446617:table/Bancs_Policy_Details",
+            "name": "Bancs_Policy_Details",
+            "partitionKey": "username",
+            "partitionKeyType": "S",
+            "hasSortKey": false,
+            "sortKey": "",
+            "sortKeyType": "",
+            "payPerRequest": true,
+            "mode": 1,
+            "secondaryIndexes": {}
+          }
+        }
+      },
+      "ddbBancsTemp": {
+        "name": "ddbBancsTemp",
+        "type": "DynamoDB",
+        "config": {
+          "mode": 1,
+          "table": {
+            "arn": "arn:aws:dynamodb:us-east-1:571286446617:table/Bancs_Temp",
+            "name": "Bancs_Temp",
+            "partitionKey": "username",
+            "partitionKeyType": "S",
+            "hasSortKey": false,
+            "sortKey": "",
+            "sortKeyType": "",
+            "payPerRequest": true,
+            "mode": 1,
+            "secondaryIndexes": {}
+          }
+        }
+      }
+    },
+    "customTemplate": {
+      "syntax": "JSON",
+      "overrideDefault": false,
+      "dialect": null,
+      "definitions": null
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "ask_sdk_core": {
+          "name": "ask_sdk_core",
+          "version": "1.13.0",
+          "dev": false,
+          "language": "python"
+        },
+        "boto3": {
+          "name": "boto3",
+          "language": "python",
+          "version": "1.12.27",
+          "dev": true,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "sigmaVersion": "1.4.3.1",
+    "projectName": "TCSBaNCSVoice",
+    "projectDescription": "TCS BaNCS Voice ",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "language": "python",
+    "platformRegions": {},
+    "lastSave": 1603053901249
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "tcsbancsvoice",
+      "url": "https://github.com/anand1125kumar/tcsbancsvoice"
+    }
+  }
+}
