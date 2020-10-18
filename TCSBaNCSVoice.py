@@ -70,7 +70,7 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
             table = dynamodb.Table('BancsLogin')
             data = table.get_item(
                 Key={
-                    'username': username,
+                    'username': username
                     }
             )
         except BaseException as e:
