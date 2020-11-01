@@ -41,9 +41,9 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
                         'username':   username
                         }
                 )
-            except BaseException as e:
-                print(e)
-                raise(e)
+        except BaseException as e:
+               print(e)
+               raise(e)
 
         handler_input.response_builder.speak("Please tell your pin").set_should_end_session(False)
         return handler_input.response_builder.response
