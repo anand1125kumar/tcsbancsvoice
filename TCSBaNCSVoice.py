@@ -154,7 +154,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
         pinActual = data['Item']['password']
 
-        if(pin != pinActual):
+        if(pin == pinActual):
             speech_text = "Invalid username and pin, please try again."
             loginFlag = 'false'
 
