@@ -135,7 +135,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)
 
-        username = data['Item']['username']
+        username = str(data['Item']['username'])
         
 
        # pin = handler_input.request_envelope.request.intent.slots['pin'].value
@@ -154,7 +154,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
         pinActual = str(data['Item']['password'])
 
-        if(pin == pinActual):
+        if(pin != pinActual):
             speech_text = "Invalid username and pin, please try again."
             loginFlag = 'false'
 
@@ -335,16 +335,29 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
 
             coveramount = data['Item']['coveramount']
             newCoverAmount = int(coveramount)+int(coveramountincrease)
-            newCoverAmount = str(newCoverAmount)
-
-           
+            newCoverAmount = str(newCoverAmount)          
 
             speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
 
-              
+                          
         except BaseException as e:
             print(e)
             raise(e) 
+
+
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.put_item(
+                Item={
+                        'username': username,
+                        'coveramount': int(newCoverAmount)
+                    }
+                )
+
+        except BaseException as e:
+            print(e)
+            raise(e)
 
         handler_input.response_builder.speak(speakText).set_should_end_session(False)
         return handler_input.response_builder.response
