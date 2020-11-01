@@ -80,25 +80,46 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         username = data1['Item']['username'] 
         print(username)
 
-        #####################################################################
+    ##### FETCH login status ########################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data = table.get_item(
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.get_item(
                 Key={
                     'username': username
                     }
             )
-
-            premiumamount = str(data['Item']['premiumamount'])
-            print(premiumamount)
-
-            speakText = "Your next premium due amount is Rupees "+premiumamount
-
               
         except BaseException as e:
             print(e)
-            raise(e) 
+            raise(e)    
+
+        status = data1['Item']['status']
+        status = str(status)
+    ####################################################
+
+        if(status == 'True'):
+        #####################################################################
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+
+                premiumamount = str(data['Item']['premiumamount'])
+                print(premiumamount)
+
+                speakText = "Your next premium due amount is Rupees "+premiumamount
+
+              
+            except BaseException as e:
+                print(e)
+                raise(e) 
+        else:
+                speakText = "Please enter valid username and pin for successfull login."
 
         
         
@@ -115,7 +136,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
 
         pin = handler_input.request_envelope.request.intent.slots['pin'].value
-        pin = str(pin)
+        #pin = str(pin)
         #a = username.split(' and ')
         #b = a[1].replace("pin is ","")
 
@@ -156,11 +177,24 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
         if(pin != pinActual):
             speech_text = "Invalid username and pin, please try again."
-            loginFlag = 'false'
+           # speech_text = "pin actual = "+pinActual+"pin entered = "+str(pin)
+            loginFlag = 'False'
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Log')
+                data = table.put_item(
+                    Item={
+                        'SerialNumber': '1',
+                        'username':   'null'
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
         else:
             speech_text = "Hello " + data['Item']['fullname'] + ".   You have successfully logged in TCS Bancs application,    hope you are doing great, your current location is " + data['Item']['location'] + ".   How may I help you?"
-            loginFlag = 'true'
+            loginFlag = 'True'
         
             try:
                 dynamodb = boto3.resource('dynamodb')
@@ -222,24 +256,45 @@ class BancsPremiumDueDateIntentHandler(AbstractRequestHandler):
         print(username)
 
         #####################################################################
+        ##### FETCH login status ########################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data = table.get_item(
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.get_item(
                 Key={
                     'username': username
                     }
             )
-
-            premiumduedate = data['Item']['premiumduedate']
-            
-
-            speakText = "Your next premium due date is "+premiumduedate
-
               
         except BaseException as e:
             print(e)
-            raise(e) 
+            raise(e)    
+
+        status = data1['Item']['status']
+        status = str(status)
+    ####################################################
+
+        if(status =='True'):
+
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+
+                premiumduedate = data['Item']['premiumduedate']          
+                speakText = "Your next premium due date is "+str(premiumduedate)
+
+                     
+            except BaseException as e:
+                print(e)
+                raise(e) 
+        
+        else:
+            speakText = "Please enter valid username and pin for successfull login."
 
         handler_input.response_builder.speak(speakText).set_should_end_session(False)
         return handler_input.response_builder.response
@@ -271,25 +326,48 @@ class BancsViewCoverAmountIntentHandler(AbstractRequestHandler):
         username = data1['Item']['username'] 
         print(username)
 
-        #####################################################################
+
+        ##### FETCH login status ########################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data = table.get_item(
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.get_item(
                 Key={
                     'username': username
                     }
             )
-
-            coveramount = str(data['Item']['coveramount'])
-            
-
-            speakText = "Your insurance cover amount is "+coveramount
-
               
         except BaseException as e:
             print(e)
-            raise(e) 
+            raise(e)    
+
+        status = data1['Item']['status']
+        status = str(status)
+    ####################################################
+
+        #####################################################################
+        if(status == 'True'):
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+
+                coveramount = str(data['Item']['coveramount'])
+            
+
+                speakText = "Your insurance cover amount is "+coveramount
+
+              
+            except BaseException as e:
+                print(e)
+                raise(e) 
+
+        else:
+            speakText = "Please enter valid username and pin for successfull login."
 
         handler_input.response_builder.speak(speakText).set_should_end_session(False)
         return handler_input.response_builder.response
@@ -323,41 +401,64 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
         username = data1['Item']['username'] 
         print(username)
 
-        #####################################################################
+
+        ##### FETCH login status ########################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data = table.get_item(
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.get_item(
                 Key={
                     'username': username
                     }
             )
-
-            coveramount = data['Item']['coveramount']
-            newCoverAmount = int(coveramount)+int(coveramountincrease)
-            newCoverAmount = str(newCoverAmount)          
-
-            speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
-
-                          
+              
         except BaseException as e:
             print(e)
-            raise(e) 
+            raise(e)    
 
+        status = data1['Item']['status']
+        status = str(status)
+    ####################################################
 
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data = table.put_item(
-                Item={
-                        'username': username,
-                        'coveramount': int(newCoverAmount)
-                    }
+        #####################################################################
+        if(status == 'True'):
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.get_item(
+                    Key={
+                        'username': username
+                        }
                 )
+                coveramount = data['Item']['coveramount']
+                newCoverAmount = int(coveramount)+int(coveramountincrease)
+                newCoverAmount = str(newCoverAmount)          
 
-        except BaseException as e:
-            print(e)
-            raise(e)
+                speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
+
+            except BaseException as e:
+                print(e)
+                raise(e) 
+
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.update_item(
+                    Key={
+                        'username': username
+                        },
+                        UpdateExpression="set coveramount=:ca",
+                        ExpressionAttributeValues={':ca': str(newCoverAmount)}         
+                                                
+                    )
+
+            except BaseException as e:
+                print(e)
+                raise(e)
+
+
+        else:
+            speakText = "Please enter valid username and pin for successfull login."               
 
         handler_input.response_builder.speak(speakText).set_should_end_session(False)
         return handler_input.response_builder.response
@@ -370,7 +471,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
     def handle(self, handler_input, exception):
         print(exception)
-        handler_input.response_builder.speak("Sorry, there was some problem. Please try again!!").set_should_end_session(False)
+        handler_input.response_builder.speak("Sorry, there was some problem. Please login again!!").set_should_end_session(False)
         return handler_input.response_builder.response
 
 class LogoutIntentHandler(AbstractRequestHandler):
