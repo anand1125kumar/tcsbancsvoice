@@ -66,7 +66,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
             premiumamount = str(data['Item']['premiumamount'])
             print(premiumamount)
 
-            speakText = "Your next premium due amount is rupees "+premiumamount
+            speakText = "Your next premium due amount is Rupees "+premiumamount
 
               
         except BaseException as e:
@@ -197,7 +197,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
         except BaseException as e:
             print(e)
             raise(e)        
-        handler_input.response_builder.speak("You have successfully logged out from TCS Bancs Bye, have a good day.").set_should_end_session(True)
+        handler_input.response_builder.speak("You have successfully logged out from TCS Bancs! Bye, have a good day.").set_should_end_session(True)
         return handler_input.response_builder.response
 
 
