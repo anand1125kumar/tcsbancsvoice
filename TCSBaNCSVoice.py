@@ -94,8 +94,8 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
             table = dynamodb.Table('Bancs_Temp')
             data1 = table.put_item(
                 Item={
-                    'username': username,
-                    'status':   loginFlag
+                    'SerialNumber': '1',
+                    'username':   username
                     }
               )
         except BaseException as e:
