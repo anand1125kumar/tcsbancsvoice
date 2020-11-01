@@ -114,17 +114,18 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
 
-        pin = str(handler_input.request_envelope.request.intent.slots['pin'].value)
+        pin = handler_input.request_envelope.request.intent.slots['pin'].value
+        pin = str(pin)
         #a = username.split(' and ')
         #b = a[1].replace("pin is ","")
 
         #username = a[0].lower()
         #pin = b
-
+        print(pin)
 
         try:
-            dynamodb = boto3.resource('Bancs_Log')
-            table = dynamodb.Table('BancsLogin')
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
             data = table.get_item(
                 Key={
                     'SerialNumber': '1'
