@@ -148,6 +148,9 @@ class LogoutIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
 
+
+        usname = Intent.slots.username.value
+
         ## Fetch username from Bancs_log table##############################
         try:
             dynamodb = boto3.resource('dynamodb')
@@ -178,7 +181,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
         except BaseException as e:
             print(e)
             raise(e)        
-        handler_input.response_builder.speak("Bye, you have successfully logged out from TCS Bancs!!").set_should_end_session(True)
+        handler_input.response_builder.speak("Bye, you have successfully logged out from TCS Bancs!!. Your new username is "+ usname).set_should_end_session(True)
         return handler_input.response_builder.response
 
 
