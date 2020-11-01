@@ -13,7 +13,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
-        handler_input.response_builder.speak("Welcome to Tata Consultancy Services Bancs solution").set_should_end_session(False)
+        handler_input.response_builder.speak("Welcome to Tata Consultancy Services Bancs solution, turning our technology to your advantage.").set_should_end_session(False)
         return handler_input.response_builder.response 
 
 class BancsLoginIntentHandler(AbstractRequestHandler):
@@ -30,12 +30,16 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("BancsPremiumAmountIntent")(handler_input)
 
+
+    #fetch premium amount
+    
+
     def handle(self, handler_input):
     
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Temp')
-            data = table.put_item(
+            data1 = table.put_item(
                 Item={
                     'username': 'ankita',
                     'status':   'qwert'
@@ -88,7 +92,7 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Temp')
-            data = table.put_item(
+            data1 = table.put_item(
                 Item={
                     'username': username,
                     'status':   loginFlag
@@ -105,8 +109,6 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
         handler_input.response_builder.speak(speech_text).set_should_end_session(False)
         return handler_input.response_builder.response  
 
-   
-
 class CatchAllExceptionHandler(AbstractExceptionHandler):
     def can_handle(self, handler_input, exception):
         return True
@@ -116,12 +118,33 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         handler_input.response_builder.speak("Sorry, there was some problem. Please try again!!").set_should_end_session(False)
         return handler_input.response_builder.response
 
+class CancelIntentHandler(AbstractExceptionHandler):
+    def can_handle(self, handler_input):
+        return True
+
+    def handle(self, handler_input):
+
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.put_item(
+                Item={
+                       'status':   'false'
+                    }
+              )
+        except BaseException as e:
+            print(e)
+            raise(e)        
+        handler_input.response_builder.speak("Bye, you have successfully logged out from TCS Bancs!!").set_should_end_session(True)
+        return handler_input.response_builder.response
+
 
 sb = SkillBuilder()
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(BancsLoginIntentHandler())
 sb.add_request_handler(BancsLoginDetailsIntentHandler())
 sb.add_request_handler(BancsPremiumAmountIntentHandler())
+sb.add_request_handler(CancelIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 def handler(event, context):

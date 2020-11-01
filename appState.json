@@ -11,8 +11,8 @@
         "isRemovable": true,
         "filePath": "TCSBaNCSVoice.py",
         "cursor": {
-          "lineNumber": 73,
-          "column": 41
+          "lineNumber": 132,
+          "column": 20
         },
         "config": {
           "runtime": "python3.8",
@@ -28,7 +28,7 @@
             "config": {}
           }
         ],
-        "lastUpdated": 1603025641888
+        "lastUpdated": 1604215113814
       }
     },
     "openFiles": [
@@ -107,7 +107,7 @@
     "customTemplate": {
       "syntax": "JSON",
       "overrideDefault": false,
-      "dialect": null,
+      "dialect": "CloudFormation",
       "definitions": null
     },
     "envVariables": [
@@ -139,7 +139,7 @@
     }
   },
   "PROJECT_META": {
-    "sigmaVersion": "1.4.3.1",
+    "sigmaVersion": "1.4.4.1",
     "projectName": "TCSBaNCSVoice",
     "projectDescription": "TCS BaNCS Voice ",
     "projectVersion": "1.0.0",
