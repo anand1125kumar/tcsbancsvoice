@@ -35,19 +35,38 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
     
 
     def handle(self, handler_input):
-    
+        
+        ## Fetch username from Bancs_log table##############################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Temp')
-            data = table.put_item(
-                Item={
-                    'username': 'ankita',
-                    'status':   'qwert'
+            table1 = dynamodb.Table('Bancs_log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
                     }
-              )
+            )
+              
         except BaseException as e:
             print(e)
-            raise(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+
+        #####################################################################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table1 = dynamodb.Table('Bancs_Policy_Details')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e) 
+
+        
         
         handler_input.response_builder.speak("Successfully updated login status").set_should_end_session(False)
         return handler_input.response_builder.response
@@ -124,12 +143,30 @@ class LogoutIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
 
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table1 = dynamodb.Table('Bancs_log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+
+        #####################################################################
+
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Temp')
             data = table.put_item(
                 Item={
-                       #'username': 'anand',
+                       'username': username,
                        'status':   'false'
                     }
               )
