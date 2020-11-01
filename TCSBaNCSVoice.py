@@ -218,6 +218,7 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(BancsLoginIntentHandler())
 sb.add_request_handler(BancsLoginDetailsIntentHandler())
 sb.add_request_handler(BancsPremiumAmountIntentHandler())
+sb.add_request_handler(BancsPINIntentHandler())
 sb.add_request_handler(LogoutIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
