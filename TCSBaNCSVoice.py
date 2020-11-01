@@ -40,7 +40,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         try:
             dynamodb = boto3.resource('dynamodb')
             table1 = dynamodb.Table('Bancs_log')
-            data1 = table.get_item(
+            data1 = table1.get_item(
                 Key={
                     'SerialNumber': '1'
                     }
@@ -55,12 +55,17 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         #####################################################################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table1 = dynamodb.Table('Bancs_Policy_Details')
-            data1 = table.get_item(
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.get_item(
                 Key={
-                    'SerialNumber': '1'
+                    'username': username
                     }
             )
+
+            premiumAmount = data['Item'][';premiumamount']
+
+            speakText = "Your next premium amount is "+premiumAmount+" rupees."
+
               
         except BaseException as e:
             print(e)
@@ -147,7 +152,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
         try:
             dynamodb = boto3.resource('dynamodb')
             table1 = dynamodb.Table('Bancs_log')
-            data1 = table.get_item(
+            data1 = table1.get_item(
                 Key={
                     'SerialNumber': '1'
                     }
