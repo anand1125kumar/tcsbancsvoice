@@ -228,7 +228,7 @@ class BancsPremiumDueDateIntentHandler(AbstractRequestHandler):
                     }
             )
 
-            premiumduedate = str(data['Item']['premiumduedate'])
+            premiumduedate = data['Item']['premiumduedate']
             
 
             speakText = "Your next premium due date is "+premiumduedate
@@ -245,7 +245,7 @@ class BancsPremiumDueDateIntentHandler(AbstractRequestHandler):
 
 #########  Fetch cover amount   #######################################################################
 
-class BancsViewCoverAmountIntentIntentHandler(AbstractRequestHandler):
+class BancsViewCoverAmountIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("BancsViewCoverAmountIntent")(handler_input)
 
@@ -294,7 +294,7 @@ class BancsViewCoverAmountIntentIntentHandler(AbstractRequestHandler):
 
 #########  Increase cover amount   #######################################################################
 
-class BancsIncreaseCoverAmountIntentIntentHandler(AbstractRequestHandler):
+class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("BancsIncreaseCoverAmountIntent")(handler_input)
 
@@ -330,12 +330,12 @@ class BancsIncreaseCoverAmountIntentIntentHandler(AbstractRequestHandler):
                     }
             )
 
-            coveramount = str(data['Item']['coveramount'])
-            newCoverAmount = coveramount + coveramountincrease
+            coveramount = data['Item']['coveramount']
+            newCoverAmount = str(coveramount + coveramountincrease)
 
            
 
-            speakText = "Your updated insurance cover amount is "+str(newCoverAmount) + "Anything else would you like me to do?"
+            speakText = "Your updated insurance cover amount is "+newCoverAmount+ "Anything else would you like me to do?"
 
               
         except BaseException as e:
