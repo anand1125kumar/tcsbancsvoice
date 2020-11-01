@@ -121,7 +121,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
         #username = a[0].lower()
         #pin = b
-        print(pin)
+        #print(pin)
 
         try:
             dynamodb = boto3.resource('dynamodb')
@@ -151,7 +151,10 @@ class BancsPINIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)
 
-        if(pin != data['Item']['password']):
+
+        pinActual = data['Item']['password']
+
+        if(pin != pinActual):
             speech_text = "Invalid username and pin, please try again."
             loginFlag = 'false'
 
