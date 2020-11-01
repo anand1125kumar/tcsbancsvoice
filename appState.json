@@ -11,8 +11,8 @@
         "isRemovable": true,
         "filePath": "TCSBaNCSVoice.py",
         "cursor": {
-          "lineNumber": 67,
-          "column": 79
+          "lineNumber": 73,
+          "column": 1
         },
         "config": {
           "runtime": "python3.8",
@@ -147,7 +147,7 @@
     "platform": "AWS",
     "language": "python",
     "platformRegions": {},
-    "lastSave": 1604223460942
+    "lastSave": 1604223487274
   },
   "VCS_STATE": {
     "provider": "GitHub",

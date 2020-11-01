@@ -73,7 +73,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
 
         
         
-        handler_input.response_builder.speak("Successfully updated login status").set_should_end_session(False)
+        handler_input.response_builder.speak(speakText).set_should_end_session(False)
         return handler_input.response_builder.response
 
 ###########################################################################################################
