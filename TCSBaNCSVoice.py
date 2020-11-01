@@ -3,6 +3,7 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
+import random
 
 global username
 global loginFlag
@@ -13,9 +14,320 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
-        handler_input.response_builder.speak("Welcome to Tata Consultancy Services Bancs solution, turning our technology to your advantage.").set_should_end_session(False)
+        handler_input.response_builder.speak("Welcome to Tata Consultancy Services Bancs solution, turning our technology to your advantage, we offer a large variety insurance products at an affordable premium. I can help you to buy a policy online best suited to your needs. Would you like to proceed to buy a life insurance policy online or login to TCS bancs voice portal.").set_should_end_session(False)
         return handler_input.response_builder.response 
+################################# I would like yo buy a policy online ##################################################################################
+class BancsRegisterUserIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterUserIntent")(handler_input)
 
+    def handle(self, handler_input):
+        handler_input.response_builder.speak("Great!, Please tell what should be your user name for online registration").set_should_end_session(False)
+        return handler_input.response_builder.response
+#####################################################################################################################
+
+############################### My user name for registration should be ****** ####################################
+class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterUserNameIntent")(handler_input)
+
+    def handle(self, handler_input):
+        
+        username = handler_input.request_envelope.request.intent.slots['username'].value
+        username = username.lower()
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('BancsLogin')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'username':   username
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Log')
+                data1 = table.put_item(
+                    Item={
+                        'SerialNumber': '1',
+                        'username':   username
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+
+        handler_input.response_builder.speak("OK, Please set your 4 digit pin").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+
+############################### My pin should be ****** ####################################
+class BancsRegisterPasswordIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterPasswordIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        pin = handler_input.request_envelope.request.intent.slots['pin'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+        pin = str(pin)
+    ##############################################################################
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('BancsLogin')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'password': pin
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        handler_input.response_builder.speak("OK, Please tell your full name").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+############################### My full name is ****** ####################################
+class BancsRegisterFullNameIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterFullNameIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        fullname = handler_input.request_envelope.request.intent.slots['fullname'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('BancsLogin')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'fullname': fullname
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        handler_input.response_builder.speak("OK, Please tell your current city").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+############################### My current city is ****** ####################################
+class BancsRegisterCityIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterCityIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+
+
+        location = handler_input.request_envelope.request.intent.slots['location'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('BancsLogin')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'location': location
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        handler_input.response_builder.speak("OK, Please tell how much insurance cover amount you want").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+############################### I want cover amount of ****** ####################################
+class BancsRegisterCoverAmountIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterCoverAmountIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        coveramount = handler_input.request_envelope.request.intent.slots['coveramount'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+        coveramount = str(coveramount)
+
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'coveramount': coveramount
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        handler_input.response_builder.speak("OK, Please tell what should the insurance term in years").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+############################### I want insurance term of  ****** ####################################
+class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterInsuranceTermIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+         term = handler_input.request_envelope.request.intent.slots['term'].value
+         term = int(term)
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username']
+        print(username)
+        
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data1 = table.get_item(
+                Key={
+                    'username': username
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+
+        coveramount = data1['Item']['coveramount']
+        ##########################################
+        policynumber = P+str(random.randint(100000000000,999999999999))
+        premiumamount = coveramount/(term*120)
+        premiumduedate = 01/01/2021
+
+
+
+
+
+        ###############################################
+
+
+
+
+
+        term = str(term)
+
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'coveramount': term
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+        handler_input.response_builder.speak("Congratulations "+username+",You successfully bought a new policy from world leading insurance company, we will offer you the worlds best insurance services, your policy number is "+policynumber+" , your premium amount is "+premiumamount+" and your next premium due is on "+premiumduedate+" , please feel free to let me know if you want any other services.").set_should_end_session(False)
+        return handler_input.response_builder.response
+########################################################################################################################
+
+
+
+
+#########################################################################################################################
 class BancsLoginIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("BancsLoginIntent")(handler_input)
@@ -578,7 +890,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
     def handle(self, handler_input, exception):
         print(exception)
-        handler_input.response_builder.speak("Sorry, there was some problem. Please login again!!").set_should_end_session(False)
+        handler_input.response_builder.speak("Sorry, there was some problem. Please try again!!").set_should_end_session(False)
         return handler_input.response_builder.response
 
 class LogoutIntentHandler(AbstractRequestHandler):
@@ -649,6 +961,13 @@ sb.add_request_handler(BancsPremiumDueDateIntentHandler())
 sb.add_request_handler(BancsViewCoverAmountIntentHandler())
 sb.add_request_handler(BancsIncreaseCoverAmountIntentHandler())
 sb.add_request_handler(BancsDecreaseCoverAmountIntentHandler())
+sb.add_request_handler(BancsRegisterUserIntentHandler())
+sb.add_request_handler(BancsRegisterUserNameIntentHandler())
+sb.add_request_handler(BancsRegisterPasswordIntentHandler())
+sb.add_request_handler(BancsRegisterFullNameIntentHandler())
+sb.add_request_handler(BancsRegisterCityIntentHandler())
+sb.add_request_handler(BancsRegisterCoverAmountIntentHandler())
+sb.add_request_handler(BancsRegisterInsuranceTermIntentHandler())
 sb.add_request_handler(LogoutIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
