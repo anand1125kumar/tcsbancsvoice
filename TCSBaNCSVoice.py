@@ -152,7 +152,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
             raise(e)
 
 
-        pinActual = data['Item']['password']
+        pinActual = str(data['Item']['password'])
 
         if(pin == pinActual):
             speech_text = "Invalid username and pin, please try again."
@@ -334,11 +334,12 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
             )
 
             coveramount = data['Item']['coveramount']
-            newCoverAmount = str(coveramount + coveramountincrease)
+            newCoverAmount = int(coveramount)+int(coveramountincrease)
+            newCoverAmount = str(newCoverAmount)
 
            
 
-            speakText = "Your updated insurance cover amount is "+newCoverAmount+ "Anything else would you like me to do?"
+            speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
 
               
         except BaseException as e:
