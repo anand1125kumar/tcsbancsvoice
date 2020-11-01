@@ -62,7 +62,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
                     }
             )
 
-            premiumAmount = data['Item'][';premiumamount']
+            premiumAmount = data['Item']['premiumamount']
 
             speakText = "Your next premium amount is "+premiumAmount+" rupees."
 
