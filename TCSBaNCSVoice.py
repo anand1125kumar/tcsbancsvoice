@@ -340,8 +340,8 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)
 
-
-        handler_input.response_builder.speak("Congratulations "+username+",You successfully bought a new policy from world leading insurance company, we will offer you the worlds best insurance services, your policy number is "+str(policynumber)+" , your premium amount is "+str(premiumamount)+" and your next premium due is on "+str(premiumduedate)+" , please feel free to let me know if you want any other services.").set_should_end_session(False)
+        speakText = "Congratulations "+username+",You successfully bought a new policy from world leading insurance company, we will offer you the worlds best insurance services, your policy number is "+str(policynumber)+" , your premium amount is "+str(premiumamount)+" and your next premium due is on "+str(premiumduedate)+" , please feel free to let me know if you want any other services."
+        handler_input.response_builder.speak("Congratulations").set_should_end_session(False)
         return handler_input.response_builder.response
 ########################################################################################################################
 
