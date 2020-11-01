@@ -45,9 +45,6 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
                 print(e)
                 raise(e)
 
-
-
-
         handler_input.response_builder.speak("Please tell your pin").set_should_end_session(False)
         return handler_input.response_builder.response
 
@@ -164,7 +161,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
             try:
                 dynamodb = boto3.resource('dynamodb')
                 table = dynamodb.Table('Bancs_Log')
-                data1 = table.put_item(
+                data = table.put_item(
                     Item={
                         'SerialNumber': '1',
                         'username':   username
@@ -178,7 +175,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
             try:
                 dynamodb = boto3.resource('dynamodb')
                 table = dynamodb.Table('Bancs_Temp')
-                data2 = table.put_item(
+                data = table.put_item(
                     Item={
                         'username': username,
                         'status':   loginFlag
@@ -251,7 +248,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
             data = table.put_item(
                 Item={
                        'SerialNumber': '1',
-                       'username':   ''
+                       'username': 'null'
                     }
               )
         except BaseException as e:
