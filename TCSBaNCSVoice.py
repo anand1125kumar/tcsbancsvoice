@@ -21,16 +21,34 @@ class BancsLoginIntentHandler(AbstractRequestHandler):
         return is_intent_name("BancsLoginIntent")(handler_input)
 
     def handle(self, handler_input):
-        handler_input.response_builder.speak("Please tell your user name and pin").set_should_end_session(False)
+        handler_input.response_builder.speak("Please tell your user name").set_should_end_session(False)
         return handler_input.response_builder.response
 
 
-class BancsPINIntentHandler(AbstractRequestHandler):
+class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        return is_intent_name("BancsPINIntent")(handler_input)
+        return is_intent_name("BancsLoginDetailsIntent")(handler_input)
 
     def handle(self, handler_input):
-        handler_input.response_builder.speak("Please tell your user name and pin").set_should_end_session(False)
+        username = handler_input.request_envelope.request.intent.slots['username'].value
+        username = username.lower()
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Log')
+                data1 = table.put_item(
+                    Item={
+                        'SerialNumber': '1',
+                        'username':   username
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
+
+
+
+
+        handler_input.response_builder.speak("Please tell your pin").set_should_end_session(False)
         return handler_input.response_builder.response
 
 
@@ -91,20 +109,36 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 ###########################################################################################################
-
-class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
+#BancsPINIntentHandler
+#BancsLoginDetailsIntentHandler
+class BancsPINIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        return is_intent_name("BancsLoginDetailsIntent")(handler_input)
+        return is_intent_name("BancsPINIntent")(handler_input)
 
     def handle(self, handler_input):
 
-        username = handler_input.request_envelope.request.intent.slots['username'].value
-        a = username.split(' and ')
-        b = a[1].replace("pin is ","")
+        pin = handler_input.request_envelope.request.intent.slots['pin'].value
+        #a = username.split(' and ')
+        #b = a[1].replace("pin is ","")
 
-        username = a[0].lower()
-        pin = b
+        #username = a[0].lower()
+        #pin = b
 
+
+        try:
+            dynamodb = boto3.resource('Bancs_Log')
+            table = dynamodb.Table('BancsLogin')
+            data = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+        username = data['Item']['username']
+        
 
        # pin = handler_input.request_envelope.request.intent.slots['pin'].value
         try:
@@ -141,18 +175,18 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
                 raise(e)
 
 
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Temp')
-            data2 = table.put_item(
-                Item={
-                    'username': username,
-                    'status':   loginFlag
-                    }
-              )
-        except BaseException as e:
-            print(e)
-            raise(e)
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Temp')
+                data2 = table.put_item(
+                    Item={
+                        'username': username,
+                        'status':   loginFlag
+                        }
+                    )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
             
 
@@ -208,7 +242,22 @@ class LogoutIntentHandler(AbstractRequestHandler):
               )
         except BaseException as e:
             print(e)
-            raise(e)        
+            raise(e) 
+
+            
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data = table.put_item(
+                Item={
+                       'SerialNumber': '1',
+                       'username':   ''
+                    }
+              )
+        except BaseException as e:
+            print(e)
+            raise(e)
+
         handler_input.response_builder.speak("You have successfully logged out from TCS Bancs! Bye, have a good day.").set_should_end_session(True)
         return handler_input.response_builder.response
 
