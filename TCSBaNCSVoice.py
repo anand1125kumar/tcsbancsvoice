@@ -63,9 +63,9 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
                     }
             )
 
-            premiumAmount = data['Item']['premiumamount']
+            premiumduedate = data['Item']['premiumduedate']
 
-            speakText = "Your next premium amount is "+premiumAmount+" rupees."
+            speakText = "Your next premium due date is "+premiumduedate
 
               
         except BaseException as e:
@@ -121,6 +121,20 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
                 Item={
                     'SerialNumber': '1',
                     'username':   username
+                    }
+              )
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Temp')
+            data2 = table.put_item(
+                Item={
+                    'username': username,
+                    'status':   loginFlag
                     }
               )
         except BaseException as e:
