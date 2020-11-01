@@ -24,6 +24,18 @@ class BancsLoginIntentHandler(AbstractRequestHandler):
         handler_input.response_builder.speak("Please tell your user name and pin").set_should_end_session(False)
         return handler_input.response_builder.response
 
+
+class BancsPINIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsPINIntent")(handler_input)
+
+    def handle(self, handler_input):
+        handler_input.response_builder.speak("Please tell your user name and pin").set_should_end_session(False)
+        return handler_input.response_builder.response
+
+
+
+
 ######################################## 10-Oct-2020  #####################################################
 
 class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
@@ -115,18 +127,18 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
             speech_text = "Hello " + data['Item']['fullname'] + ".   You have successfully logged in TCS Bancs application,    hope you are doing great, your current location is " + data['Item']['location'] + ".   How may I help you?"
             loginFlag = 'true'
         
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Log')
-            data1 = table.put_item(
-                Item={
-                    'SerialNumber': '1',
-                    'username':   username
-                    }
-              )
-        except BaseException as e:
-            print(e)
-            raise(e)
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Log')
+                data1 = table.put_item(
+                    Item={
+                        'SerialNumber': '1',
+                        'username':   username
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
 
         try:
@@ -160,7 +172,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
 class LogoutIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        return True
+        return is_intent_name("LogoutIntent")(handler_input)
 
     def handle(self, handler_input):
 
