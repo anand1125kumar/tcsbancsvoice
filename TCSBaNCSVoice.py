@@ -114,7 +114,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
 
-        pin = handler_input.request_envelope.request.intent.slots['pin'].value
+        pin = str(handler_input.request_envelope.request.intent.slots['pin'].value)
         #a = username.split(' and ')
         #b = a[1].replace("pin is ","")
 
