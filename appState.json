@@ -11,8 +11,8 @@
         "isRemovable": true,
         "filePath": "TCSBaNCSVoice.py",
         "cursor": {
-          "lineNumber": 68,
-          "column": 64
+          "lineNumber": 66,
+          "column": 61
         },
         "config": {
           "runtime": "python3.8",

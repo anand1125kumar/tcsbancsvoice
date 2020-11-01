@@ -63,7 +63,8 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
                     }
             )
 
-            premiumamount = data['Item']['premiumamount']
+            premiumamount = data['Item']['premiumamount']['N']
+            print(premiumamount)
 
             speakText = "Your next premium due amount is rupees "+premiumamount
 
