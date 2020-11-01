@@ -39,7 +39,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Temp')
-            data1 = table.put_item(
+            data = table.put_item(
                 Item={
                     'username': 'ankita',
                     'status':   'qwert'
@@ -118,7 +118,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         handler_input.response_builder.speak("Sorry, there was some problem. Please try again!!").set_should_end_session(False)
         return handler_input.response_builder.response
 
-class LogoutIntentHandler(AbstractExceptionHandler):
+class LogoutIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return True
 
@@ -127,7 +127,7 @@ class LogoutIntentHandler(AbstractExceptionHandler):
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Temp')
-            data1 = table.put_item(
+            data = table.put_item(
                 Item={
                        'username': 'anand',
                        'status':   'false'
