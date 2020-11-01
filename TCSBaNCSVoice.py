@@ -129,7 +129,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
             table = dynamodb.Table('Bancs_Temp')
             data = table.put_item(
                 Item={
-                       'username': 'anand',
+                       #'username': 'anand',
                        'status':   'false'
                     }
               )
