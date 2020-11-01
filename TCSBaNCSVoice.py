@@ -118,7 +118,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         handler_input.response_builder.speak("Sorry, there was some problem. Please try again!!").set_should_end_session(False)
         return handler_input.response_builder.response
 
-class CancelIntentHandler(AbstractExceptionHandler):
+class LogoutIntentHandler(AbstractExceptionHandler):
     def can_handle(self, handler_input):
         return True
 
@@ -145,7 +145,7 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(BancsLoginIntentHandler())
 sb.add_request_handler(BancsLoginDetailsIntentHandler())
 sb.add_request_handler(BancsPremiumAmountIntentHandler())
-sb.add_request_handler(CancelIntentHandler())
+sb.add_request_handler(LogoutIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 def handler(event, context):
