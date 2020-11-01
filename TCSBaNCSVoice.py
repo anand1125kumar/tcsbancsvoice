@@ -39,8 +39,8 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
         ## Fetch username from Bancs_log table##############################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table1 = dynamodb.Table('Bancs_log')
-            data1 = table1.get_item(
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
                 Key={
                     'SerialNumber': '1'
                     }
@@ -151,8 +151,8 @@ class LogoutIntentHandler(AbstractRequestHandler):
         ## Fetch username from Bancs_log table##############################
         try:
             dynamodb = boto3.resource('dynamodb')
-            table1 = dynamodb.Table('Bancs_log')
-            data1 = table1.get_item(
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
                 Key={
                     'SerialNumber': '1'
                     }
