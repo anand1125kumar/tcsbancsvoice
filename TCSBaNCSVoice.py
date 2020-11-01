@@ -129,6 +129,7 @@ class CancelIntentHandler(AbstractExceptionHandler):
             table = dynamodb.Table('Bancs_Temp')
             data1 = table.put_item(
                 Item={
+                       'username': 'anand',
                        'status':   'false'
                     }
               )
