@@ -439,7 +439,7 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
                 ########  Premium Calculation   #############
                 insuranceTerm = int(data['Item']['term'])
                 newCoverAmount = int(newCoverAmount)
-                premiumamount = newCoverAmount/insuranceTerm*1200
+                premiumamount = newCoverAmount/(insuranceTerm*1200)
                 ##############################################
 
             except BaseException as e:
@@ -537,7 +537,7 @@ class BancsDecreaseCoverAmountIntentHandler(AbstractRequestHandler):
 
                 insuranceTerm = int(data['Item']['term'])
                 newCoverAmount = int(newCoverAmount)
-                premiumamount = newCoverAmount/insuranceTerm*1200
+                premiumamount = newCoverAmount/(insuranceTerm*1200)
 
 
                 ##############################################
