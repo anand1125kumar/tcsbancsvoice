@@ -51,6 +51,7 @@ class BancsPremiumAmountIntentHandler(AbstractRequestHandler):
             raise(e)    
 
         username = data1['Item']['username'] 
+        print(username)
 
         #####################################################################
         try:
