@@ -359,7 +359,7 @@ class BancsViewCoverAmountIntentHandler(AbstractRequestHandler):
                 coveramount = str(data['Item']['coveramount'])
             
 
-                speakText = "Your insurance cover amount is "+coveramount
+                speakText = "Your total insurance cover amount is Rupees "+coveramount
 
               
             except BaseException as e:
@@ -633,7 +633,7 @@ class LogoutIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)
 
-        handler_input.response_builder.speak("You have successfully logged out from TCS Bancs! Bye, have a good day.").set_should_end_session(True)
+        handler_input.response_builder.speak("You have successfully logged out from TCS Bancs! Bye, take care of yourself, it was nice talking to you, I would like to meet you again.").set_should_end_session(True)
         return handler_input.response_builder.response
 
 
