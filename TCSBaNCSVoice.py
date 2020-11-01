@@ -91,7 +91,7 @@ class BancsLoginDetailsIntentHandler(AbstractRequestHandler):
         
         try:
             dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Temp')
+            table = dynamodb.Table('Bancs_Log')
             data1 = table.put_item(
                 Item={
                     'SerialNumber': '1',
