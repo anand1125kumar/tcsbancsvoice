@@ -434,7 +434,13 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
                 newCoverAmount = int(coveramount)+int(coveramountincrease)
                 newCoverAmount = str(newCoverAmount)          
 
-                speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
+                speakText = "Ok Your insurance total cover amount has been successfully updated to Rupees "+newCoverAmount
+
+                ########  Premium Calculation   #############
+                insuranceTerm = int(data['Item']['term'])
+                newCoverAmount = int(newCoverAmount)
+                premiumamount = newCoverAmount/insuranceTerm*1200
+                ##############################################
 
             except BaseException as e:
                 print(e)
@@ -447,8 +453,8 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
                     Key={
                         'username': username
                         },
-                        UpdateExpression="set coveramount=:ca",
-                        ExpressionAttributeValues={':ca': str(newCoverAmount)}         
+                        UpdateExpression="set coveramount=:ca, premiumamount = :pa",
+                        ExpressionAttributeValues={':ca': str(newCoverAmount), ':pa': str(premiumamount)}         
                                                 
                     )
 
@@ -522,10 +528,19 @@ class BancsDecreaseCoverAmountIntentHandler(AbstractRequestHandler):
                         }
                 )
                 coveramount = data['Item']['coveramount']
-                newCoverAmount = int(coveramount) - int(coveramountincrease)
+                newCoverAmount = int(coveramount) - int(coveramountdecrease)
                 newCoverAmount = str(newCoverAmount)          
 
-                speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
+                speakText = "OK Your total insurance cover amount has been successfully updated to Rupees "+newCoverAmount
+
+                ########  Premium Calculation   #############
+
+                insuranceTerm = int(data['Item']['term'])
+                newCoverAmount = int(newCoverAmount)
+                premiumamount = newCoverAmount/insuranceTerm*1200
+
+
+                ##############################################
 
             except BaseException as e:
                 print(e)
@@ -538,8 +553,8 @@ class BancsDecreaseCoverAmountIntentHandler(AbstractRequestHandler):
                     Key={
                         'username': username
                         },
-                        UpdateExpression="set coveramount=:ca",
-                        ExpressionAttributeValues={':ca': str(newCoverAmount)}         
+                        UpdateExpression="set coveramount=:ca, premiumamount = :pa",
+                        ExpressionAttributeValues={':ca': str(newCoverAmount), ':pa': str(premiumamount)}         
                                                 
                     )
 
