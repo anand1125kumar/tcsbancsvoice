@@ -40,8 +40,23 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
                 table = dynamodb.Table('BancsLogin')
                 data1 = table.put_item(
                     Item={
-                        'username': username,
-                        'username':   username
+                        'username': username
+                        
+                        }
+                )
+        except BaseException as e:
+               print(e)
+               raise(e)
+
+
+
+        try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data1 = table.put_item(
+                    Item={
+                        'username': username
+                        
                         }
                 )
         except BaseException as e:
@@ -98,15 +113,18 @@ class BancsRegisterPasswordIntentHandler(AbstractRequestHandler):
         try:
                 dynamodb = boto3.resource('dynamodb')
                 table = dynamodb.Table('BancsLogin')
-                data1 = table.put_item(
-                    Item={
-                        'username': username,
-                        'password': pin
-                        }
-                )
-        except BaseException as e:
-               print(e)
-               raise(e)
+                data = table.update_item(
+                    Key={
+                        'username': username
+                        },
+                        UpdateExpression="set password=:pn",
+                        ExpressionAttributeValues={':pn': pin}         
+                                                
+                    )
+
+            except BaseException as e:
+                print(e)
+                raise(e)
 
         handler_input.response_builder.speak("OK, Please tell your full name").set_should_end_session(False)
         return handler_input.response_builder.response
@@ -140,17 +158,20 @@ class BancsRegisterFullNameIntentHandler(AbstractRequestHandler):
 
 
         try:
-                dynamodb = boto3.resource('dynamodb')
-                table = dynamodb.Table('BancsLogin')
-                data1 = table.put_item(
-                    Item={
-                        'username': username,
-                        'fullname': fullname
-                        }
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('BancsLogin')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set fullname=:fn",
+                    ExpressionAttributeValues={':fn': fullname}         
+                                                
                 )
+
         except BaseException as e:
-               print(e)
-               raise(e)
+            print(e)
+            raise(e)
 
         handler_input.response_builder.speak("OK, Please tell your current city").set_should_end_session(False)
         return handler_input.response_builder.response
@@ -188,15 +209,18 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
         try:
                 dynamodb = boto3.resource('dynamodb')
                 table = dynamodb.Table('BancsLogin')
-                data1 = table.put_item(
-                    Item={
-                        'username': username,
-                        'location': location
-                        }
-                )
+                data = table.update_item(
+                    Key={
+                        'username': username
+                        },
+                        UpdateExpression="set location=:loc",
+                        ExpressionAttributeValues={':loc': location}         
+                                                
+                    )
+
         except BaseException as e:
-               print(e)
-               raise(e)
+            print(e)
+            raise(e)
 
         handler_input.response_builder.speak("OK, Please tell how much insurance cover amount you want").set_should_end_session(False)
         return handler_input.response_builder.response
@@ -231,17 +255,20 @@ class BancsRegisterCoverAmountIntentHandler(AbstractRequestHandler):
 
 
         try:
-                dynamodb = boto3.resource('dynamodb')
-                table = dynamodb.Table('Bancs_Policy_Details')
-                data1 = table.put_item(
-                    Item={
-                        'username': username,
-                        'coveramount': coveramount
-                        }
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set coveramount=:ca",
+                    ExpressionAttributeValues={':ca': coveramount}         
+                                                
                 )
+
         except BaseException as e:
-               print(e)
-               raise(e)
+            print(e)
+            raise(e)
 
         handler_input.response_builder.speak("OK, Please tell what should the insurance term in years").set_should_end_session(False)
         return handler_input.response_builder.response
@@ -253,9 +280,8 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         return is_intent_name("BancsRegisterInsuranceTermIntent")(handler_input)
 
     def handle(self, handler_input):
-
-         term = handler_input.request_envelope.request.intent.slots['term'].value
-         term = int(term)
+        term = handler_input.request_envelope.request.intent.slots['term'].value
+        term = int(term)
 
         ## Fetch username from Bancs_log table##############################
         try:
@@ -271,9 +297,10 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)    
 
-        username = data1['Item']['username']
+        username = data1['Item']['username'] 
         print(username)
-        
+
+
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('Bancs_Policy_Details')
@@ -285,42 +312,36 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
               
         except BaseException as e:
             print(e)
-            raise(e)
-
+            raise(e)    
 
         coveramount = data1['Item']['coveramount']
-        ##########################################
+        coveramount = int(coveramount)
+
         policynumber = P+str(random.randint(100000000000,999999999999))
         premiumamount = coveramount/(term*120)
+        premiumamount = "{:.2f}".format(premiumamount)
         premiumduedate = 01/01/2021
-
-
-
-
-
-        ###############################################
-
-
-
-
-
-        term = str(term)
+        
 
 
         try:
-                dynamodb = boto3.resource('dynamodb')
-                table = dynamodb.Table('Bancs_Policy_Details')
-                data1 = table.put_item(
-                    Item={
-                        'username': username,
-                        'coveramount': term
-                        }
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set policynumber=:pn, premiumamount = :pa, premiumduedate = :pdd, term = :pt",
+                    ExpressionAttributeValues={':pn': str(policynumber), ':pa': str(premiumamount), ':pdd': str(premiumduedate), ':pt': term}         
+                                                
                 )
-        except BaseException as e:
-               print(e)
-               raise(e)
 
-        handler_input.response_builder.speak("Congratulations "+username+",You successfully bought a new policy from world leading insurance company, we will offer you the worlds best insurance services, your policy number is "+policynumber+" , your premium amount is "+premiumamount+" and your next premium due is on "+premiumduedate+" , please feel free to let me know if you want any other services.").set_should_end_session(False)
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+
+        handler_input.response_builder.speak("Congratulations "+username+",You successfully bought a new policy from world leading insurance company, we will offer you the worlds best insurance services, your policy number is "+str(policynumber)+" , your premium amount is "+str(premiumamount)+" and your next premium due is on "+str(premiumduedate)+" , please feel free to let me know if you want any other services.").set_should_end_session(False)
         return handler_input.response_builder.response
 ########################################################################################################################
 
