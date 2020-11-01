@@ -464,6 +464,96 @@ class BancsIncreaseCoverAmountIntentHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 #########################################################################################################################
 
+#########  Decrease cover amount   #######################################################################
+
+class BancsDecreaseCoverAmountIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsDecreaseCoverAmountIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        coveramountdecrease = handler_input.request_envelope.request.intent.slots['decreasecoveramount'].value
+        #coveramountdecrease = str(coveramountdecrease)
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+
+
+        ##### FETCH login status ########################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Temp')
+            data1 = table.get_item(
+                Key={
+                    'username': username
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        status = data1['Item']['status']
+        status = str(status)
+    ####################################################
+
+        #####################################################################
+        if(status == 'True'):
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+                coveramount = data['Item']['coveramount']
+                newCoverAmount = int(coveramount) - int(coveramountincrease)
+                newCoverAmount = str(newCoverAmount)          
+
+                speakText = "Your updated insurance cover amount is Rupees "+newCoverAmount
+
+            except BaseException as e:
+                print(e)
+                raise(e) 
+
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data = table.update_item(
+                    Key={
+                        'username': username
+                        },
+                        UpdateExpression="set coveramount=:ca",
+                        ExpressionAttributeValues={':ca': str(newCoverAmount)}         
+                                                
+                    )
+
+            except BaseException as e:
+                print(e)
+                raise(e)
+
+
+        else:
+            speakText = "Please enter valid username and pin for successfull login."               
+
+        handler_input.response_builder.speak(speakText).set_should_end_session(False)
+        return handler_input.response_builder.response
+#########################################################################################################################
 
 class CatchAllExceptionHandler(AbstractExceptionHandler):
     def can_handle(self, handler_input, exception):
@@ -541,6 +631,7 @@ sb.add_request_handler(BancsPINIntentHandler())
 sb.add_request_handler(BancsPremiumDueDateIntentHandler())
 sb.add_request_handler(BancsViewCoverAmountIntentHandler())
 sb.add_request_handler(BancsIncreaseCoverAmountIntentHandler())
+sb.add_request_handler(BancsDecreaseCoverAmountIntentHandler())
 sb.add_request_handler(LogoutIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
