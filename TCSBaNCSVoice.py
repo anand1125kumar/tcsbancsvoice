@@ -367,9 +367,10 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         #policynumber = '112211221122'
         premiumamount = coveramount/(term*120)
         premiumamount = "{:.2f}".format(premiumamount)
+
         today = datetime.datetime.today()
 
-        dd = "05/"
+        dd = "05"
         mm = int(today.month)
         yy = int(today.year)
 
@@ -379,17 +380,17 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
             mm = 1
             yy = yy + 1
 
-        mm =str(mm)+"/"
-        yy = str(yy)+"/"
+        mm =str(mm)
+        yy = str(yy)
 
-        nextduedate = dd+mm+yy
+        nextduedate = dd+"/"+mm+"/"+yy
         
 
 
 
         
 
-        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today "+today+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
+        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today "+str(today)+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
         return handler_input.response_builder.response
 
 ########################################################################################################################
