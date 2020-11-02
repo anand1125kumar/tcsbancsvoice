@@ -369,6 +369,7 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         premiumamount = "{:.2f}".format(premiumamount)
 
         today = datetime.datetime.today()
+        
 
         dd = "05"
         mm = int(today.month)
@@ -383,7 +384,8 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         mm =str(mm)
         yy = str(yy)
 
-        nextduedate = dd+"/"+mm+"/"+yy
+        nextduedate = dd+"-"+mm+"-"+yy
+        today = str(today.day) +"-"+ str(today.month) +"-"+ str(today.year)
         
 
 
