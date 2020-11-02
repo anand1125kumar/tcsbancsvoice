@@ -387,10 +387,24 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         nextduedate = dd+"-"+mm+"-"+yy
         today = str(today.day) +"-"+ str(today.month) +"-"+ str(today.year)
         
+        ## update policy number  in bancs policy details table ##########
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set policynumber=:pn, coveramount=:ca, premiumamount=:pa, premiumduedate=:pdd, term=:pt,",
+                    ExpressionAttributeValues={':pn': str(policynumber), ':ca': str(coveramount), ':pa': str(premiumamount), ':pdd': nextduedate, ':pt': term}         
+                                                
+                )
+
+        except BaseException as e:
+            print(e)
+            raise(e)
 
 
-
-        
 
         handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today "+str(today)+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
         return handler_input.response_builder.response
