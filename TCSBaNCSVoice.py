@@ -228,7 +228,7 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
                     'username': username
                     },
                     UpdateExpression="set location=:loct",
-                    ExpressionAttributeValues={':loct': city1}         
+                    ExpressionAttributeValues={':loct': 'kolkata'}         
                                                 
                 )
 
