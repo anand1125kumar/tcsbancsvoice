@@ -200,7 +200,7 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
 
-        location = handler_input.request_envelope.request.intent.slots['city'].value
+        city1 = handler_input.request_envelope.request.intent.slots['city'].value
 
         ## Fetch username from Bancs_log table##############################
         try:
@@ -218,10 +218,8 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
 
         username = data1['Item']['username'] 
         print(username)
-        location = str(location)
         
-
-
+        
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('BancsLogin')
@@ -230,13 +228,14 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
                     'username': username
                     },
                     UpdateExpression="set location=:loct",
-                    ExpressionAttributeValues={':loct': location}         
+                    ExpressionAttributeValues={':loct': city1}         
                                                 
                 )
 
         except BaseException as e:
             print(e)
             raise(e)
+
 
         handler_input.response_builder.speak("OK, Please tell how much insurance cover amount you want").set_should_end_session(False)
         return handler_input.response_builder.response
