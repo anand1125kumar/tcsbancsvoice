@@ -48,15 +48,14 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
               
         except e:
             print(e)
-              
-
-
-        try:
-            
-            status = data1['Item']['status']
-
-        except e:
             status = 'not present'
+              
+            
+        status = data1['Item']['status']
+        status = str(status.lower())
+
+        
+            
 
         ################################################################################################################
 
