@@ -48,11 +48,15 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
               
         except e:
             print(e)
-            status = 'not present'
-              
             
-        status = data1['Item']['status']
-        status = str(status.lower())
+              
+        try: 
+            status = data1['Item']['status']
+            status = str(status.lower())
+
+        except e:
+            status = 'not present'
+
 
         
             
@@ -117,15 +121,14 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
                 print(e)
                 raise(e)
 
-
-
             speak_text = "OK, Please set your 4 digit pin"
+
 
         else:
             speak_text = 'username already exists, please try some other username'
 
 
-        handler_input.response_builder.speak().set_should_end_session(False)
+        handler_input.response_builder.speak(speak_text).set_should_end_session(False)
         return handler_input.response_builder.response
 ########################################################################################################################
 ############################### My pin should be ****** ####################################
