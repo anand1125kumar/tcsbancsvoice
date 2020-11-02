@@ -48,7 +48,7 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
               
         except e:
             print(e)
-            raise(e)    
+              
 
 
         try:
