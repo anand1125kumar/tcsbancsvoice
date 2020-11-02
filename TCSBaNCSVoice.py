@@ -219,7 +219,8 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
         username = data1['Item']['username'] 
         print(username)
         
-        
+
+        ## update city in bancs login table ##########
         try:
             dynamodb = boto3.resource('dynamodb')
             table = dynamodb.Table('BancsLogin')
@@ -227,8 +228,8 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
                 Key={
                     'username': username
                     },
-                    UpdateExpression="set location=:loct",
-                    ExpressionAttributeValues={':loct': 'kolkata'}         
+                    UpdateExpression="set city=:ln",
+                    ExpressionAttributeValues={':ln': str(city1)}         
                                                 
                 )
 
@@ -237,12 +238,117 @@ class BancsRegisterCityIntentHandler(AbstractRequestHandler):
             raise(e)
 
 
-        handler_input.response_builder.speak("OK, Please tell how much insurance cover amount you want").set_should_end_session(False)
+        
+
+        handler_input.response_builder.speak("OK, please tell me how much insurance cover amount you want").set_should_end_session(False)
+        return handler_input.response_builder.response
+
+########################################################################################################################
+
+############################### Insurance cover amount should be ****** ####################################
+class BancsRegisterCoverAmountIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterCoverAmountIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        coveramount = handler_input.request_envelope.request.intent.slots['coveramount'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+        
+
+        ## update cover amount  in bancs policy details table ##########
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set coveramount=:ca",
+                    ExpressionAttributeValues={':ca': str(coveramount)}         
+                                                
+                )
+
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+
+        
+
+        handler_input.response_builder.speak("OK, please tell me how much should be the term of the insurance").set_should_end_session(False)
         return handler_input.response_builder.response
 
 ########################################################################################################################
 
 
+############################### Insurance term should be ****** ####################################
+class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("BancsRegisterInsuranceTermIntent")(handler_input)
+
+    def handle(self, handler_input):
+
+        term = handler_input.request_envelope.request.intent.slots['term'].value
+
+        ## Fetch username from Bancs_log table##############################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Log')
+            data1 = table.get_item(
+                Key={
+                    'SerialNumber': '1'
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        username = data1['Item']['username'] 
+        print(username)
+        
+
+        ## update cover amount  in bancs policy details table ##########
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data = table.update_item(
+                Key={
+                    'username': username
+                    },
+                    UpdateExpression="set term=:ca",
+                    ExpressionAttributeValues={':ca': int(term)}         
+                                                
+                )
+
+        except BaseException as e:
+            print(e)
+            raise(e)
+
+
+        
+
+        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company, we will provide the best in class insurance services, your policy number is 123456789, your premium amount is 5000 rupees and your next premium due is on 01/01/2021, Please let me know if you need any other services. Thank you").set_should_end_session(False)
+        return handler_input.response_builder.response
+
+########################################################################################################################
 
 
 #########################################################################################################################
@@ -423,7 +529,7 @@ class BancsPINIntentHandler(AbstractRequestHandler):
                 raise(e)
 
         else:
-            speech_text = "Hello " + data['Item']['fullname'] + ".   You have successfully logged in TCS Bancs application,    hope you are doing great, your current location is " + data['Item']['location'] + ".   How may I help you?"
+            speech_text = "Hello " + data['Item']['fullname'] + ".   You have successfully logged in TCS Bancs application,    hope you are doing great, your current location is " + data['Item']['city'] + ".   How may I help you?"
             loginFlag = 'True'
         
             try:
@@ -884,6 +990,8 @@ sb.add_request_handler(BancsRegisterUserIntentHandler())
 sb.add_request_handler(BancsRegisterUserNameIntentHandler())
 sb.add_request_handler(BancsRegisterPasswordIntentHandler())
 sb.add_request_handler(BancsRegisterFullNameIntentHandler())
+sb.add_request_handler(BancsRegisterCoverAmountIntentHandler())
+sb.add_request_handler(BancsRegisterInsuranceTermIntentHandler())
 sb.add_request_handler(LogoutIntentHandler())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
