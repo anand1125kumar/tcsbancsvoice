@@ -47,7 +47,7 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
             )
               
         except e:
-            print(e)
+            status = 'inactive'
             
               
         try: 
@@ -55,7 +55,7 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
             status = str(status.lower())
 
         except e:
-            status = 'not present'
+            status = 'inactive'
 
 
         
@@ -63,7 +63,7 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
 
         ################################################################################################################
 
-        if status == 'active':
+        if status != 'active':
 
             try:
                 dynamodb = boto3.resource('dynamodb')
@@ -83,7 +83,8 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
                 table = dynamodb.Table('BancsLogin')
                 data1 = table.put_item(
                     Item={
-                        'username': username
+                        'username': username,
+                        'status': 'active'
                         
                         }
                 )
