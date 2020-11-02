@@ -46,15 +46,15 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
                     }
             )
               
-        except e:
+        except Exception:
             status = 'inactive'
             
               
         try: 
             status = data1['Item']['status']
-            status = str(status.lower())
+            status = status.lower()
 
-        except e:
+        except Exception:
             status = 'inactive'
 
 
