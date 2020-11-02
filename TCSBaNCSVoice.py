@@ -60,68 +60,73 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
 
         ################################################################################################################
 
+        if status != 'active':
 
-        
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Log')
+                data1 = table.put_item(
+                    Item={
+                        'SerialNumber': '1',
+                        'username':   username
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Log')
-            data1 = table.put_item(
-                Item={
-                    'SerialNumber': '1',
-                    'username':   username
-                    }
-            )
-        except BaseException as e:
-               print(e)
-               raise(e)
-
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('BancsLogin')
-            data1 = table.put_item(
-                Item={
-                    'username': username
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('BancsLogin')
+                data1 = table.put_item(
+                    Item={
+                        'username': username
                         
-                    }
-            )
-        except BaseException as e:
-               print(e)
-               raise(e)
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
 
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Temp')
-            data1 = table.put_item(
-                Item={
-                    'username': username,
-                    'status': 'False'
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Temp')
+                data1 = table.put_item(
+                    Item={
+                        'username': username,
+                        'status': 'False'
                     
-                }
-            )
-        except BaseException as e:
-               print(e)
-               raise(e)
-
-
-
-        try:
-            dynamodb = boto3.resource('dynamodb')
-            table = dynamodb.Table('Bancs_Policy_Details')
-            data1 = table.put_item(
-                Item={
-                    'username': username
-                        
                     }
-            )
-        except BaseException as e:
-               print(e)
-               raise(e)
-        
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
 
 
-        handler_input.response_builder.speak("OK, Please set your 4 digit pin").set_should_end_session(False)
+
+            try:
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('Bancs_Policy_Details')
+                data1 = table.put_item(
+                    Item={
+                        'username': username
+                        
+                        }
+                )
+            except BaseException as e:
+                print(e)
+                raise(e)
+
+
+
+            speak_text = "OK, Please set your 4 digit pin"
+
+        else:
+            speak_text = 'username already exists, please try some other username'
+
+
+        handler_input.response_builder.speak().set_should_end_session(False)
         return handler_input.response_builder.response
 ########################################################################################################################
 ############################### My pin should be ****** ####################################
