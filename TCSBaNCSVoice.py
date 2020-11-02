@@ -63,7 +63,7 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
 
         ################################################################################################################
 
-        if status != 'active':
+        if status == 'active':
 
             try:
                 dynamodb = boto3.resource('dynamodb')
