@@ -35,6 +35,32 @@ class BancsRegisterUserNameIntentHandler(AbstractRequestHandler):
         
         username = handler_input.request_envelope.request.intent.slots['username'].value
         username = str(username.lower())
+
+        ########################### verify existing user #############################################################
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('BancsLogin')
+            data1 = table.get_item(
+                Key={
+                    'username': username
+                    }
+            )
+              
+        except e:
+            print(e)
+            raise(e)    
+
+
+        try:
+            
+            status = data1['Item']['status']
+
+        except e:
+            status = 'not present'
+
+        ################################################################################################################
+
+
         
 
         try:
@@ -406,7 +432,7 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
 
 
 
-        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today "+str(today)+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
+        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today, the  "+str(today)+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
         return handler_input.response_builder.response
 
 ########################################################################################################################
