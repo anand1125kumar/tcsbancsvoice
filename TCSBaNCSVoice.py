@@ -4,7 +4,7 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
-
+import datetime
 
 global username
 global loginFlag
@@ -367,13 +367,29 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
         #policynumber = '112211221122'
         premiumamount = coveramount/(term*120)
         premiumamount = "{:.2f}".format(premiumamount)
-        nextduedate = '01/01/2021'
+        today = datetime.datetime.today()
+
+        dd = "05/"
+        mm = int(today.month)
+        yy = int(today.year)
+
+        if(mm < 12):
+            mm = mm + 1
+        else:
+            mm = 1
+            yy = yy + 1
+
+        mm =str(mm)+"/"
+        yy = str(yy)+"/"
+
+        nextduedate = dd+mm+yy
+        
 
 
 
         
 
-        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company, we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
+        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company today "+today+", we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
         return handler_input.response_builder.response
 
 ########################################################################################################################
