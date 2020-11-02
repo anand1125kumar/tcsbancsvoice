@@ -395,8 +395,8 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
                 Key={
                     'username': username
                     },
-                    UpdateExpression="set policynumber=:pn, coveramount=:ca, premiumamount=:pa, premiumduedate=:pdd, term=:pt,",
-                    ExpressionAttributeValues={':pn': str(policynumber), ':ca': str(coveramount), ':pa': str(premiumamount), ':pdd': nextduedate, ':pt': term}         
+                    UpdateExpression="set policynumber=:pn, premiumamount=:pa, premiumduedate=:pdd",
+                    ExpressionAttributeValues={':pn': str(policynumber), ':pa': str(premiumamount), ':pdd': nextduedate}         
                                                 
                 )
 
