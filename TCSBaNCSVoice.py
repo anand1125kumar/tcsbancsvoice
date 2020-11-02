@@ -1,4 +1,5 @@
 import boto3
+import random
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
@@ -342,10 +343,37 @@ class BancsRegisterInsuranceTermIntentHandler(AbstractRequestHandler):
             print(e)
             raise(e)
 
+        ############################ fetch cover amount    #####################
+
+        try:
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('Bancs_Policy_Details')
+            data1 = table.get_item(
+                Key={
+                    'username': username
+                    }
+            )
+              
+        except BaseException as e:
+            print(e)
+            raise(e)    
+
+        coveramount = data1['Item']['coveramount']
+
+        coveramount = int(coveramount)
+        term = int(term)
+
+        policynumber = random.randint(100000000000,999999999999)
+        #policynumber = '112211221122'
+        premiumamount = coveramount/(term*120)
+        premiumamount = "{:.2f}".format(premiumamount)
+        nextduedate = '01/01/2021'
+
+
 
         
 
-        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company, we will provide the best in class insurance services, your policy number is 123456789, your premium amount is 5000 rupees and your next premium due is on 01/01/2021, Please let me know if you need any other services. Thank you").set_should_end_session(False)
+        handler_input.response_builder.speak("Congratulations, you have successfully purchased a policy from world leading insurance company, we will provide the best in class insurance services, your policy number is "+str(policynumber)+", your premium amount is "+str(premiumamount)+" rupees and your next premium due is on "+str(nextduedate)+", Please let me know if you need any other services. Thank you").set_should_end_session(False)
         return handler_input.response_builder.response
 
 ########################################################################################################################
